@@ -41,6 +41,8 @@ export function Navbar() {
         </div>
 
         <div className="ml-auto flex items-center gap-2">
+          <StarshipSync />
+          <ThreatBadge />
           <motion.button
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
