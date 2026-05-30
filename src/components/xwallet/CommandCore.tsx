@@ -1,14 +1,15 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
-import { ArrowDownToLine, FileDown, Scale, Shield, Sparkles, ChevronRight } from "lucide-react";
+import { ArrowDownToLine, FileDown, Scale, Shield, Sparkles, ChevronRight, Maximize2 } from "lucide-react";
 import { toast } from "sonner";
 import { feedItems, matrix, triggers } from "./data";
+import { MatrixModal } from "./MatrixModal";
 
 const tabs = ["24h", "7d", "30d"] as const;
 
 export function CommandCore({ balance }: { balance: number }) {
   const [tab, setTab] = useState<(typeof tabs)[number]>("24h");
-  const [expanded, setExpanded] = useState<number | null>(null);
+  const [modalIdx, setModalIdx] = useState<number | null>(null);
   const [feedOpen, setFeedOpen] = useState(false);
 
   const deltas = { "24h": "+$49,872 (11.4%)", "7d": "+$72,108 (17.4%)", "30d": "+$118,440 (32.0%)" };
