@@ -58,19 +58,41 @@ export function PortfolioVault() {
       </div>
 
       <div className="glass rounded-lg p-4">
-        <div className="flex items-center gap-2 mb-3">
-          <span className="w-2 h-2 rounded-full bg-[color:var(--success)] animate-pulse" />
-          <span className="label-caps text-[color:var(--success)] text-xs">Nigeria Routing Active</span>
+        <div className="flex items-center justify-between mb-2">
+          <span className="label-caps text-muted-foreground text-xs">Position Health</span>
+          <span className="text-[color:var(--success)] font-bold text-sm tabular-nums">92%</span>
+        </div>
+        <div className="h-2 rounded-full bg-white/10 overflow-hidden">
+          <div className="h-full bg-gradient-to-r from-[color:var(--success)] to-emerald-300" style={{ width: "92%" }} />
+        </div>
+        <div className="mt-2 grid grid-cols-3 gap-1 text-[10px] text-center">
+          <div><div className="text-[color:var(--success)] font-bold">A+</div><div className="text-muted-foreground">Liquidity</div></div>
+          <div><div className="text-[color:var(--success)] font-bold">A</div><div className="text-muted-foreground">Hedge</div></div>
+          <div><div className="text-crimson font-bold">C</div><div className="text-muted-foreground">Concentr.</div></div>
+        </div>
+      </div>
+
+      <div className="glass rounded-lg p-4">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-[color:var(--success)] animate-pulse" />
+            <span className="label-caps text-[color:var(--success)] text-xs">Nigeria Route</span>
+          </div>
+          <span className="text-[10px] tabular-nums text-muted-foreground">3 / 4</span>
+        </div>
+        <div className="h-1.5 rounded-full bg-white/10 overflow-hidden mb-3">
+          <div className="h-full bg-gradient-to-r from-crimson to-crimson-glow" style={{ width: "75%" }} />
         </div>
         <ul className="space-y-2 text-xs">
           {[
             ["IBKR verified", true],
             ["Fidelity IPO queued", true],
             ["Robinhood secondary ready", true],
+            ["FIRS tax wrapper filed", false],
           ].map(([label, ok]) => (
             <li key={label as string} className="flex items-center gap-2">
-              <Check className={`w-3.5 h-3.5 ${ok ? "text-[color:var(--success)]" : "text-muted-foreground"}`} />
-              <span>{label}</span>
+              <Check className={`w-3.5 h-3.5 ${ok ? "text-[color:var(--success)]" : "text-muted-foreground/40"}`} />
+              <span className={ok ? "" : "text-muted-foreground"}>{label}</span>
             </li>
           ))}
         </ul>

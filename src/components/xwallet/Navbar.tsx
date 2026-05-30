@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Wallet, LogOut, Moon } from "lucide-react";
 import { toast } from "sonner";
+import { StarshipSync, ThreatBadge } from "./StatusBadges";
 
 function Ticker({ symbol, price, change, positive = true }: { symbol: string; price: string; change: string; positive?: boolean }) {
   return (
@@ -40,6 +41,8 @@ export function Navbar() {
         </div>
 
         <div className="ml-auto flex items-center gap-2">
+          <StarshipSync />
+          <ThreatBadge />
           <motion.button
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}

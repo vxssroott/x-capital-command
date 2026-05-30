@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { ChevronDown, FileText, Dice5, Share2 } from "lucide-react";
+import { ChevronDown, FileText, Dice5, Share2, Crosshair } from "lucide-react";
 import { toast } from "sonner";
 
 function RiskDial({ value = 78 }: { value?: number }) {
@@ -42,7 +42,7 @@ const optimizeOpts = [
 const calendar = Array.from({ length: 28 }, (_, i) => i + 1);
 const hot = new Set([3, 12, 17, 22, 27]);
 
-export function ExecutionRail() {
+export function ExecutionRail({ onLethality }: { onLethality: () => void }) {
   const [openOpt, setOpenOpt] = useState(false);
   return (
     <aside className="space-y-4">
@@ -90,17 +90,28 @@ export function ExecutionRail() {
         </div>
       </div>
 
+      <motion.button
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+        onClick={onLethality}
+        className="w-full btn-crimson rounded-md px-4 py-3 flex items-center gap-2 label-caps text-sm font-bold relative overflow-hidden group"
+      >
+        <Crosshair className="w-4 h-4" /> Lethality Sim
+        <span className="ml-auto text-[10px] opacity-80">18-MO · P50</span>
+        <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent group-hover:translate-x-full transition-transform duration-700" />
+      </motion.button>
+
       <div className="space-y-2">
         {[
           { icon: FileText, label: "Generate Full Thesis", msg: "Compiling 38 sources · ~20s" },
-          { icon: Dice5, label: "Run Monte Carlo", msg: "10,000 paths · P5/P50/P95 ready" },
+          { icon: Dice5, label: "Run Monte Carlo", msg: "10,000 paths · P5 $612K · P50 $1.04M · P95 $1.84M" },
           { icon: Share2, label: "Share Encrypted Link", msg: "x.wal/9F2A · expires 24h" },
         ].map((b) => (
           <motion.button
             key={b.label}
-            whileHover={{ x: 2 }}
+            whileHover={{ scale: 1.02, x: 2 }}
             onClick={() => toast.success(b.label, { description: b.msg })}
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-md glass hover:border-crimson/50 text-sm label-caps"
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-md glass hover:border-crimson/60 hover:shadow-[0_0_20px_-8px_var(--crimson-glow)] text-sm label-caps"
           >
             <b.icon className="w-4 h-4 text-crimson" /> {b.label}
           </motion.button>

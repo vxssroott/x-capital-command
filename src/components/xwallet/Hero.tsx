@@ -3,7 +3,7 @@ import { useState } from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import { Rocket } from "lucide-react";
 import { toast } from "sonner";
-import { allocationData } from "./data";
+import { allocationData, sideTotals } from "./data";
 
 export function Hero({ onExecute }: { onExecute: () => void }) {
   const [hovered, setHovered] = useState<number | null>(null);
@@ -65,17 +65,18 @@ export function Hero({ onExecute }: { onExecute: () => void }) {
           </div>
         </div>
 
-        <div className="relative h-[220px] w-full">
+        <div className="relative h-[240px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
                 data={allocationData}
                 cx="50%" cy="50%"
-                innerRadius={62} outerRadius={95}
+                innerRadius={62} outerRadius={hovered !== null ? 102 : 95}
                 paddingAngle={2}
                 dataKey="value"
                 onMouseEnter={(_, i) => setHovered(i)}
                 onMouseLeave={() => setHovered(null)}
+                isAnimationActive
               >
                 {allocationData.map((d, i) => (
                   <Cell
@@ -83,20 +84,45 @@ export function Hero({ onExecute }: { onExecute: () => void }) {
                     fill={d.color}
                     stroke="#000"
                     strokeWidth={2}
-                    style={{ filter: hovered === i ? "brightness(1.3)" : "none", transition: "filter .2s", cursor: "pointer" }}
+                    style={{
+                      filter: hovered === i ? "brightness(1.4) drop-shadow(0 0 12px " + d.color + ")" : hovered !== null ? "brightness(0.5)" : "none",
+                      transition: "filter .2s",
+                      cursor: "pointer",
+                      transform: hovered === i ? "scale(1.04)" : "scale(1)",
+                      transformOrigin: "center",
+                    }}
                   />
                 ))}
               </Pie>
               <Tooltip
-                contentStyle={{ background: "#0a0a0a", border: "1px solid #2a2a2a", borderRadius: 6, fontSize: 12 }}
-                formatter={(_v, _n, p: any) => [`${p.payload.raw}% of ${p.payload.side}`, p.payload.name]}
+                contentStyle={{ background: "#0a0a0a", border: "1px solid #E31937", borderRadius: 6, fontSize: 12, padding: 10 }}
+                formatter={(_v, _n, p: any) => [
+                  `$${p.payload.dollars.toLocaleString()} · ${p.payload.raw}% of ${p.payload.side}`,
+                  p.payload.name,
+                ]}
               />
             </PieChart>
           </ResponsiveContainer>
           <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-            <div className="label-caps text-muted-foreground">Split</div>
-            <div className="font-display font-black text-2xl">72 / 28</div>
-            <div className="text-[10px] text-crimson label-caps">TSLA · SPCX</div>
+            {hovered === null ? (
+              <>
+                <div className="label-caps text-muted-foreground">Split</div>
+                <div className="font-display font-black text-2xl">72 / 28</div>
+                <div className="text-[10px] text-crimson label-caps">TSLA · SPCX</div>
+              </>
+            ) : (
+              <>
+                <div className="label-caps text-[9px] text-muted-foreground">{allocationData[hovered].side}</div>
+                <div className="font-display font-black text-xl tabular-nums" style={{ color: allocationData[hovered].color }}>
+                  ${allocationData[hovered].dollars.toLocaleString()}
+                </div>
+                <div className="text-[10px] text-muted-foreground">{allocationData[hovered].name}</div>
+              </>
+            )}
+          </div>
+          <div className="absolute bottom-0 left-0 right-0 flex justify-between px-2 text-[10px] tabular-nums">
+            <span className="text-crimson">TSLA ${sideTotals.TSLA.toLocaleString()}</span>
+            <span className="text-silver">SPCX ${sideTotals.SPCX.toLocaleString()}</span>
           </div>
         </div>
       </div>
