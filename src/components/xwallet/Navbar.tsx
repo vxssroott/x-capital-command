@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Wallet, LogOut, Moon } from "lucide-react";
 import { toast } from "sonner";
+import { StarshipSync, ThreatBadge } from "./StatusBadges";
 
 function Ticker({ symbol, price, change, positive = true }: { symbol: string; price: string; change: string; positive?: boolean }) {
   return (
