@@ -3,7 +3,7 @@ import { useState } from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import { Rocket } from "lucide-react";
 import { toast } from "sonner";
-import { allocationData } from "./data";
+import { allocationData, sideTotals } from "./data";
 
 export function Hero({ onExecute }: { onExecute: () => void }) {
   const [hovered, setHovered] = useState<number | null>(null);
