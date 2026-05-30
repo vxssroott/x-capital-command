@@ -8,6 +8,8 @@ import { CommandCore } from "@/components/xwallet/CommandCore";
 import { ExecutionRail } from "@/components/xwallet/ExecutionRail";
 import { FooterBar } from "@/components/xwallet/FooterBar";
 import { LoadingScreen } from "@/components/xwallet/LoadingScreen";
+import { StarshipBackdrop } from "@/components/xwallet/StarshipBackdrop";
+import { LethalityModal } from "@/components/xwallet/LethalityModal";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -29,20 +31,25 @@ export const Route = createFileRoute("/")({
 function XwalletDashboard() {
   const [loading, setLoading] = useState(true);
   const [balance, setBalance] = useState(487291.42);
+  const [lethality, setLethality] = useState(false);
 
   return (
     <div className="dark min-h-screen text-foreground relative scanline">
       {loading && <LoadingScreen onDone={() => setLoading(false)} />}
-      <Navbar />
-      <Hero onExecute={() => setBalance(512108.07)} />
+      <StarshipBackdrop />
+      <div className="relative z-10">
+        <Navbar />
+        <Hero onExecute={() => setBalance(512108.07)} />
 
-      <main className="max-w-[1600px] mx-auto px-4 lg:px-6 py-6 grid grid-cols-1 lg:grid-cols-[280px_1fr_300px] gap-6">
-        <PortfolioVault />
-        <CommandCore balance={balance} />
-        <ExecutionRail />
-      </main>
+        <main className="max-w-[1600px] mx-auto px-4 lg:px-6 py-6 grid grid-cols-1 lg:grid-cols-[280px_1fr_300px] gap-6">
+          <PortfolioVault />
+          <CommandCore balance={balance} />
+          <ExecutionRail onLethality={() => setLethality(true)} />
+        </main>
 
-      <FooterBar />
+        <FooterBar />
+      </div>
+      <LethalityModal open={lethality} onClose={() => setLethality(false)} />
       <Toaster theme="dark" position="bottom-right" />
     </div>
   );
