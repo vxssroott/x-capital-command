@@ -98,42 +98,38 @@ export function CommandCore({ balance }: { balance: number }) {
       </div>
 
       <div>
-        <div className="label-caps text-muted-foreground mb-3">Feature Matrix · Click to Expand</div>
+        <div className="label-caps text-muted-foreground mb-3 flex items-center justify-between">
+          <span>Feature Matrix · Click for Command Module</span>
+          <span className="text-[10px] text-crimson">3 × 2</span>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
           {matrix.map((m, i) => {
-            const isOpen = expanded === i;
             const isRisk = m.title === "Risk Gauge";
             return (
               <motion.button
                 key={m.title}
-                layout
-                onClick={() => setExpanded(isOpen ? null : i)}
-                className={`text-left glass rounded-lg p-4 transition-all ${isOpen ? "ring-1 ring-crimson/60 shadow-[0_0_30px_-10px_var(--crimson-glow)]" : "hover:border-crimson/40"}`}
+                whileHover={{ scale: 1.02, y: -2 }}
+                whileTap={{ scale: 0.99 }}
+                transition={{ type: "spring", stiffness: 320, damping: 22 }}
+                onClick={() => setModalIdx(i)}
+                className="text-left glass rounded-lg p-4 hover:border-crimson/60 hover:shadow-[0_0_25px_-8px_var(--crimson-glow)] group relative"
               >
-                <motion.div layout="position">
-                  <div className="flex items-center justify-between">
-                    <span className="font-display font-bold">{m.title}</span>
-                    <ChevronRight className={`w-4 h-4 text-muted-foreground transition-transform ${isOpen ? "rotate-90" : ""}`} />
-                  </div>
-                  <div className={`mt-1 text-sm font-semibold ${isRisk ? "text-crimson" : "text-[color:var(--success)]"}`}>{m.metric}</div>
-                  <p className="mt-2 text-xs text-muted-foreground leading-relaxed">{m.body}</p>
-                </motion.div>
-                <AnimatePresence initial={false}>
-                  {isOpen && (
-                    <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
-                      <ul className="mt-3 pt-3 border-t border-border space-y-1.5 text-xs">
-                        {m.detail.map((d) => (
-                          <li key={d} className="flex gap-2"><span className="text-crimson">›</span>{d}</li>
-                        ))}
-                      </ul>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                <Maximize2 className="absolute top-3 right-3 w-3.5 h-3.5 text-muted-foreground group-hover:text-crimson transition-colors" />
+                <div className="font-display font-bold pr-6">{m.title}</div>
+                <div className={`mt-1 text-sm font-semibold ${isRisk ? "text-crimson" : "text-[color:var(--success)]"}`}>{m.metric}</div>
+                <div className="mt-1 text-[10px] text-muted-foreground/80 tabular-nums">{m.secondary}</div>
+                <p className="mt-2 text-xs text-muted-foreground leading-relaxed line-clamp-2">{m.body}</p>
+                <div className="mt-3 pt-2 border-t border-border flex items-center justify-between">
+                  <span className="label-caps text-[9px] text-muted-foreground">{m.detail.length} signals</span>
+                  <ChevronRight className="w-3.5 h-3.5 text-crimson opacity-0 group-hover:opacity-100 transition-opacity" />
+                </div>
               </motion.button>
             );
           })}
         </div>
       </div>
+
+      <MatrixModal card={modalIdx !== null ? matrix[modalIdx] : null} onClose={() => setModalIdx(null)} />
 
       <div className="glass rounded-lg p-4">
         <div className="label-caps text-muted-foreground mb-3">Watch Triggers</div>
